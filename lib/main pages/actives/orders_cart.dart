@@ -3,7 +3,6 @@ import 'package:uymarket1/main%20pages/actives/submitOrder_page.dart';
 import 'package:uymarket1/models/active_orders_cart.dart';
 import 'package:uymarket1/models/submit_model.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
 
 class OrdersCart extends StatefulWidget {
   final int id;
@@ -15,43 +14,53 @@ class OrdersCart extends StatefulWidget {
 
 class _OrdersCartState extends State<OrdersCart> {
   List<CartItems> ordersList = [
-    CartItems(doorName: 'Oshxona eshigiOshxona eshigiOshxona eshigiOshxona eshigi',orderCount: '22'),
+    CartItems(
+        doorName: 'Oshxona eshigiOshxona eshigiOshxona eshigiOshxona eshigi',
+        orderCount: '22'),
   ];
 
   // ignore: missing_return
   Future<Database> _database1;
 // ignore: missing_return
   Future<List<SubmitOrders>> getOrderData() async {
-    _database1 = openDatabase('orders.db');
-    // Get a reference to the database.
-    final Database db = await _database1;
 
-    // Query the table for all The SubmitOrders.
-    final List<Map<String, dynamic>> maps = await db.query('orders');
-    if (maps == null) {
+
+      _database1 = openDatabase('orders.db');
+
+
+    final Database db = await _database1;
+    int count = Sqflite.firstIntValue(
+        await db.rawQuery('SELECT COUNT(*) FROM orders${widget.id}'));
+    if (count == 0) {
+      print('table is empty');
     } else {
-      // Convert the List<Map<String, dynamic> into a List<SubmitOrders>.
-      for (int i = 0; i < maps.length; i++) {
-        CartItems newlist = CartItems(
-          orderCount: maps[i]['id'].toString(),
-          doorName: maps[i]['coronacount'],
-        );
-        ordersList.add(newlist);
-        setState(() {});
+      _database1 = openDatabase('orders.db');
+      // Get a reference to the database.
+      final Database db = await _database1;
+
+      // Query the table for all The SubmitOrders.
+      final List<Map<String, dynamic>> maps =
+          await db.query('orders${widget.id}');
+      if (maps.isEmpty) {
+        print('maps is null');
+      } else {
+        // Convert the List<Map<String, dynamic> into a List<SubmitOrders>.
+        for (int i = 0; i < maps.length; i++) {
+          CartItems newlist = CartItems(
+            orderCount: maps[i]['id'].toString(),
+            doorName: maps[i]['coronacount'],
+          );
+          ordersList.add(newlist);
+          setState(() {});
+        }
       }
     }
   }
 
-  void tableIsEmpty() async {
-    var db = await _database1;
 
-    int count =
-        Sqflite.firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM orders'));
 
-    print(count);
-  }
-
-  Widget basicOrder({String doorName, String buyurtmaSoni, int indexNum, Size sizeQuery}) {
+  Widget basicOrder(
+      {String doorName, String buyurtmaSoni, int indexNum, Size sizeQuery}) {
     return Container(
       height: sizeQuery.height * 0.08,
       child: Card(
@@ -64,12 +73,24 @@ class _OrdersCartState extends State<OrdersCart> {
             SizedBox(
               width: sizeQuery.width * 0.02,
             ),
-            Container(width: sizeQuery.width*0.45,child: SingleChildScrollView(scrollDirection: Axis.horizontal,child: Text(doorName,maxLines: 1,)),),
+            Container(
+              width: sizeQuery.width * 0.45,
+              child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Text(
+                    doorName,
+                    maxLines: 1,
+                  )),
+            ),
             SizedBox(
               width: sizeQuery.width * 0.01,
             ),
-            VerticalDivider(color: Colors.black,endIndent: sizeQuery.height*0.01,indent: sizeQuery.height*0.01,),
-            Text('Буйуртма сони: ${buyurtmaSoni}'),
+            VerticalDivider(
+              color: Colors.black,
+              endIndent: sizeQuery.height * 0.01,
+              indent: sizeQuery.height * 0.01,
+            ),
+            Text('Буйуртма сони: $buyurtmaSoni'),
           ],
         ),
       ),
@@ -78,6 +99,7 @@ class _OrdersCartState extends State<OrdersCart> {
 
   @override
   void initState() {
+  
     super.initState();
   }
 
@@ -98,7 +120,7 @@ class _OrdersCartState extends State<OrdersCart> {
           IconButton(
             onPressed: () {
               getOrderData();
-              tableIsEmpty();
+             
               // Navigator.push(
               //   context,
               //   MaterialPageRoute(

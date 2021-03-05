@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:uymarket1/main%20pages/actives/orders_cart.dart';
-import 'package:uymarket1/main%20pages/actives/submitOrder_page.dart';
 import 'package:uymarket1/models/orders.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -175,10 +174,19 @@ class _ActivesState extends State<ActiveActions> {
   @override
   Widget build(BuildContext context) {
     final sizeQuery = MediaQuery.of(context).size;
-    return Scaffold(
-      appBar: AppBar(
+
+
+      var appbar = AppBar(
         backgroundColor: Colors.blue,
-      ),
+      );
+
+
+
+
+
+
+    return Scaffold(
+      appBar: appbar,
       body: Column(
         children: [
           Container(
@@ -212,7 +220,7 @@ class _ActivesState extends State<ActiveActions> {
             ),
           ),
           Container(
-            height: sizeQuery.height * 0.78,
+            height: (sizeQuery.height-appbar.preferredSize.height-MediaQuery.of(context).padding.top) * 0.78,
             child: ListView.builder(
               shrinkWrap: true,
               itemCount: cardInfo.length,
