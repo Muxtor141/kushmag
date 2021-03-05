@@ -61,34 +61,20 @@ class SubmitOrderPageState extends State<SubmitOrderPage> {
   final _dobor2Size2Key = GlobalKey<FormState>();
   final _dobor2CountKey = GlobalKey<FormState>();
   bool isError = false;
-tableIsEmpty() async {
-    var db = await database;
-
-    int count = Sqflite.firstIntValue(
-        await db.rawQuery('SELECT COUNT(*) FROM orders${widget.orderID}'));
-    if (count == 0) {
-      return true;
-    } else {
-      return false;
-    }
-  }
 
   void openDB() async {
     WidgetsFlutterBinding.ensureInitialized();
-    if (tableIsEmpty()) {
-      database = openDatabase(
-        join(await getDatabasesPath(), 'orders.db'),
-        onCreate: (db, version) {
-          return db.execute(
-              "CREATE TABLE orders${widget.orderID}(id INTEGER PRIMARY KEY, razmerBoyi DOUBLE, razmereni DOUBLE,razmercount INTEGER,coronasirt DOUBLE,coronaishi DOUBLE,coronacount INTEGER,nalichniksize1 DOUBLE,nalichniksize2 DOUBLE,nalichnikcount INTEGER,boxCheck BOOLEAN,dobor1size1 DOUBLE,dobor1size2 DOUBLE,dobor2size1 DOUBLE,dobor2size2 DOUBLE,dobor1count INTEGER,dobor2count INTEGER,promok DOUBLE)");
-        },
-        version: 1,
-      );
 
-      print('openDB() called');
-    } else {
-      database = openDatabase('orders.db');
-    }
+    database = openDatabase(
+      join(await getDatabasesPath(), 'orders.db'),
+      onCreate: (db, version) {
+        return db.execute(
+            "CREATE TABLE orders${widget.orderID}(id INTEGER PRIMARY KEY, razmerBoyi DOUBLE, razmereni DOUBLE,razmercount INTEGER,coronasirt DOUBLE,coronaishi DOUBLE,coronacount INTEGER,nalichniksize1 DOUBLE,nalichniksize2 DOUBLE,nalichnikcount INTEGER,boxCheck BOOLEAN,dobor1size1 DOUBLE,dobor1size2 DOUBLE,dobor2size1 DOUBLE,dobor2size2 DOUBLE,dobor1count INTEGER,dobor2count INTEGER,promok DOUBLE)");
+      },
+      version: 1,
+    );
+
+    print('openDB() called');
   }
 
   Future<void> insertOrder(SubmitOrders orders) async {
@@ -186,6 +172,66 @@ tableIsEmpty() async {
         return false;
       }
     }
+
+    // if (k1.text.isEmpty && k2.text.isEmpty && k3.text.isEmpty) {
+    //   //1 if
+    //   print('all null');
+    // } //1 if end
+    // else {
+    //   if (k1.text != null || k2.text != null || k3.text != null) {
+    //     //2 if
+    //     print('all check');
+
+    //     if (k1.text.isNotEmpty && k2.text.isEmpty && k3.text.isEmpty) {
+    //       f2.currentState.validate();
+    //       f3.currentState.validate();
+
+    //       return false;
+    //     }
+    //     if (k1.text.isEmpty && k2.text.isNotEmpty && k3.text.isEmpty) {
+    //       f1.currentState.validate();
+    //       f3.currentState.validate();
+
+    //       return false;
+    //     }
+    //     if (k1.text.isEmpty && k2.text.isEmpty && k3.text.isNotEmpty) {
+    //       f1.currentState.validate();
+    //       f2.currentState.validate();
+
+    //       return false;
+    //     }//sas
+    //      if (k1.text.isNotEmpty && k2.text.isNotEmpty && k3.text.isEmpty) {
+
+    //      f1.currentState.validate();
+    //       f2.currentState.validate();
+
+    //        f3.currentState.validate();
+
+    //       return false;
+    //     }
+    //      if (k1.text.isNotEmpty && k2.text.isEmpty && k3.text.isNotEmpty) {
+    //        f1.currentState.validate();
+    //       f2.currentState.validate();
+
+    //        f3.currentState.validate();
+
+    //       return false;
+    //     }
+    //      if (k1.text.isEmpty && k2.text.isNotEmpty && k3.text.isNotEmpty) {
+
+    //        f1.currentState.validate();
+    //       f2.currentState.validate();
+
+    //        f3.currentState.validate();
+
+    //       return false;
+    //     }//dasa
+    //   } else {
+    //     print('yaxshi');
+    //   }
+    //   //2 if end
+
+    // }
   }
 
   singleValidateModel(GlobalKey<FormState> f1) {
