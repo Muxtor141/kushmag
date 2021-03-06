@@ -5,7 +5,8 @@ import 'package:uymarket1/models/submit_model.dart';
 
 class SubmitOrderPage extends StatefulWidget {
   final int orderID;
-  SubmitOrderPage({Key key, this.orderID}) : super(key: key);
+  final int tableID;
+  SubmitOrderPage({Key key, this.orderID,this.tableID}) : super(key: key);
   @override
   SubmitOrderPageState createState() => SubmitOrderPageState();
 }
@@ -34,12 +35,11 @@ class SubmitOrderPageState extends State<SubmitOrderPage> {
   final dobor2Count = TextEditingController();
 
   final promokSizeController = TextEditingController();
-  final materialTypeController = TextEditingController();
+  final eshikNomiController = TextEditingController();
 
   final overallCountController = TextEditingController();
   final orderNameController = TextEditingController();
 
-  final _materialKey = GlobalKey<FormState>();
   final _razmerBoyiKey = GlobalKey<FormState>();
   final _razmerEniKey = GlobalKey<FormState>();
   final _razmerCountKey = GlobalKey<FormState>();
@@ -64,14 +64,14 @@ class SubmitOrderPageState extends State<SubmitOrderPage> {
 
   void openDB() async {
     WidgetsFlutterBinding.ensureInitialized();
-
+    Future.delayed(Duration(seconds: 1));
     database = openDatabase(
       join(await getDatabasesPath(), 'orders.db'),
       onCreate: (db, version) {
         return db.execute(
-            "CREATE TABLE orders${widget.orderID}(id INTEGER PRIMARY KEY, razmerBoyi DOUBLE, razmereni DOUBLE,razmercount INTEGER,coronasirt DOUBLE,coronaishi DOUBLE,coronacount INTEGER,nalichniksize1 DOUBLE,nalichniksize2 DOUBLE,nalichnikcount INTEGER,boxCheck BOOLEAN,dobor1size1 DOUBLE,dobor1size2 DOUBLE,dobor2size1 DOUBLE,dobor2size2 DOUBLE,dobor1count INTEGER,dobor2count INTEGER,promok DOUBLE)");
+            "CREATE TABLE orders${widget.orderID}(id INTEGER PRIMARY KEY, eshikNomi TEXT, razmerBoyi DOUBLE, razmereni DOUBLE, razmercount INTEGER,coronasirt DOUBLE,coronaishi DOUBLE,coronacount INTEGER,nalichniksize1 DOUBLE,nalichniksize2 DOUBLE,nalichnikcount INTEGER,boxCheck BOOLEAN,dobor1size1 DOUBLE,dobor1size2 DOUBLE,dobor2size1 DOUBLE,dobor2size2 DOUBLE,dobor1count INTEGER,dobor2count INTEGER,promok DOUBLE,buyurtmaSoni INTEGER)");
       },
-      version: 1,
+      version:1,
     );
 
     print('openDB() called');
@@ -172,66 +172,6 @@ class SubmitOrderPageState extends State<SubmitOrderPage> {
         return false;
       }
     }
-
-    // if (k1.text.isEmpty && k2.text.isEmpty && k3.text.isEmpty) {
-    //   //1 if
-    //   print('all null');
-    // } //1 if end
-    // else {
-    //   if (k1.text != null || k2.text != null || k3.text != null) {
-    //     //2 if
-    //     print('all check');
-
-    //     if (k1.text.isNotEmpty && k2.text.isEmpty && k3.text.isEmpty) {
-    //       f2.currentState.validate();
-    //       f3.currentState.validate();
-
-    //       return false;
-    //     }
-    //     if (k1.text.isEmpty && k2.text.isNotEmpty && k3.text.isEmpty) {
-    //       f1.currentState.validate();
-    //       f3.currentState.validate();
-
-    //       return false;
-    //     }
-    //     if (k1.text.isEmpty && k2.text.isEmpty && k3.text.isNotEmpty) {
-    //       f1.currentState.validate();
-    //       f2.currentState.validate();
-
-    //       return false;
-    //     }//sas
-    //      if (k1.text.isNotEmpty && k2.text.isNotEmpty && k3.text.isEmpty) {
-
-    //      f1.currentState.validate();
-    //       f2.currentState.validate();
-
-    //        f3.currentState.validate();
-
-    //       return false;
-    //     }
-    //      if (k1.text.isNotEmpty && k2.text.isEmpty && k3.text.isNotEmpty) {
-    //        f1.currentState.validate();
-    //       f2.currentState.validate();
-
-    //        f3.currentState.validate();
-
-    //       return false;
-    //     }
-    //      if (k1.text.isEmpty && k2.text.isNotEmpty && k3.text.isNotEmpty) {
-
-    //        f1.currentState.validate();
-    //       f2.currentState.validate();
-
-    //        f3.currentState.validate();
-
-    //       return false;
-    //     }//dasa
-    //   } else {
-    //     print('yaxshi');
-    //   }
-    //   //2 if end
-
-    // }
   }
 
   singleValidateModel(GlobalKey<FormState> f1) {
@@ -314,14 +254,6 @@ class SubmitOrderPageState extends State<SubmitOrderPage> {
     }
   }
 
-  materialValidate() {
-    if (singleValidateModel(_materialKey)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   promokValidate() {
     if (singleValidateModel(_promokSizeKey)) {
       return true;
@@ -351,7 +283,6 @@ class SubmitOrderPageState extends State<SubmitOrderPage> {
         coronaValidate() &&
         nalichnikValidate() &&
         dobor1Validate() &&
-        materialValidate() &&
         promokValidate() &&
         eshikNomiValidate() &&
         buyurtmaSoniValidate()) {
@@ -362,7 +293,6 @@ class SubmitOrderPageState extends State<SubmitOrderPage> {
       nalichnikValidate();
       dobor1Validate();
       dobor2Validate();
-      materialValidate();
       promokValidate();
       eshikNomiValidate();
       buyurtmaSoniValidate();
@@ -382,6 +312,7 @@ class SubmitOrderPageState extends State<SubmitOrderPage> {
   @override
   Widget build(BuildContext context) {
     final order = SubmitOrders(
+      //this field will be added
       coronaSirt:
           coronaSirtController.text.isEmpty ? '' : coronaSirtController.text,
       coronaIshi:
@@ -416,8 +347,15 @@ class SubmitOrderPageState extends State<SubmitOrderPage> {
           dobor2Size2Controller.text.isEmpty ? '' : dobor2Size2Controller.text,
       dobor1Count: dobor1Count.text.isEmpty ? '' : dobor1Count.text,
       dobor2Count: dobor2Count.text.isEmpty ? '' : dobor2Count.text,
-      id: widget.orderID.toString().isEmpty ? '' : widget.orderID.toString(),
-      promok: promokSizeController.text,
+      id: widget.tableID.toString().isEmpty ? '' : widget.tableID.toString(),
+      promok:
+          promokSizeController.text.isEmpty ? '' : promokSizeController.text,
+      eshiknomi:
+          eshikNomiController.text.isEmpty ? '' : eshikNomiController.text,
+      buyurtmaSoni: overallCountController.text.isEmpty
+          ? ''
+          : overallCountController.text,
+      boxCheck: packageCheck,
     );
     final sizeQuery = MediaQuery.of(context).size;
     final textFieldsHeight = MediaQuery.of(context).size.height * 0.04;
@@ -430,24 +368,6 @@ class SubmitOrderPageState extends State<SubmitOrderPage> {
       body: Container(
         child: SingleChildScrollView(
           child: Column(children: [
-            SizedBox(
-              height: sizeQuery.height * 0.02,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                basicTextField(
-                    formKey: _materialKey,
-                    label: 'Материал',
-                    textController: materialTypeController,
-                    sizeQuery: sizeQuery,
-                    textFieldsHeight: textFieldsHeight,
-                    width: 0.4),
-                SizedBox(
-                  width: sizeQuery.width * 0.55,
-                ),
-              ],
-            ),
             SizedBox(
               height: sizeQuery.height * 0.03,
             ),
@@ -756,7 +676,7 @@ class SubmitOrderPageState extends State<SubmitOrderPage> {
                 children: [
                   basicTextField(
                       formKey: _eshikNomiKey,
-                      textController: orderNameController,
+                      textController: eshikNomiController,
                       label: 'Ешик Номи',
                       sizeQuery: sizeQuery,
                       textFieldsHeight: textFieldsHeight,

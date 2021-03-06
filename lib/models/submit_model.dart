@@ -9,13 +9,16 @@ class SubmitOrders {
       razmerEni,
       coronaSirt,
       coronaIshi,
+      eshiknomi,
       nalichnikSize1,
       nalichnikSize2,
       dobor1Size1,
       dobor1Size2,
       dobor2Size1,
       dobor2Size2,
+      buyurtmaSoni,
       promok;
+  final bool boxCheck;
 
   SubmitOrders(
       {this.id,
@@ -34,7 +37,10 @@ class SubmitOrders {
       this.promok,
       this.razmerBoyi,
       this.razmerCount,
-      this.razmerEni});
+      this.razmerEni,
+      this.eshiknomi,
+      this.buyurtmaSoni,
+      this.boxCheck});
 
   // Convert a Dog into a Map. The keys must correspond to the names of the
   // columns in the database.
@@ -43,21 +49,23 @@ class SubmitOrders {
       'id': id,
       'razmerBoyi': razmerBoyi,
       'razmerEni': razmerEni,
-      'razmercount':razmerCount,
-      'coronasirt':coronaSirt,
-      'coronaishi':coronaIshi,
-      'coronacount':coronaCount,
-      'nalichniksize1':nalichnikSize1,
-      'nalichniksize2':nalichnikSize2,
-      'nalichnikcount':nalichnikCount,
-      'dobor1size1':dobor1Size1,
-      'dobor1size2':dobor1Size2,
-      'dobor2size1':dobor2Size1,
-      'dobor2size2':dobor2Size2,
-      'dobor1count':dobor1Count,
-      'dobor2count':dobor2Count,
-      'promok':promok,
-
+      'razmercount': razmerCount,
+      'coronasirt': coronaSirt,
+      'coronaishi': coronaIshi,
+      'coronacount': coronaCount,
+      'nalichniksize1': nalichnikSize1,
+      'nalichniksize2': nalichnikSize2,
+      'nalichnikcount': nalichnikCount,
+      'dobor1size1': dobor1Size1,
+      'dobor1size2': dobor1Size2,
+      'dobor2size1': dobor2Size1,
+      'dobor2size2': dobor2Size2,
+      'dobor1count': dobor1Count,
+      'dobor2count': dobor2Count,
+      'promok': promok,
+      'eshikNomi': eshiknomi,
+      'buyurtmaSoni': buyurtmaSoni,
+      'boxCheck':boxCheck
     };
   }
 }

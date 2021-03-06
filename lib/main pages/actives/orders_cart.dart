@@ -13,6 +13,7 @@ class OrdersCart extends StatefulWidget {
 }
 
 class _OrdersCartState extends State<OrdersCart> {
+  int tableID;
   List<CartItems> ordersList = [
     CartItems(
         doorName: 'Oshxona eshigiOshxona eshigiOshxona eshigiOshxona eshigi',
@@ -23,10 +24,35 @@ class _OrdersCartState extends State<OrdersCart> {
   Future<Database> _database1;
 // ignore: missing_return
   Future<List<SubmitOrders>> getOrderData() async {
+    ordersList.clear();
 
+    final Database db = await _database1;
 
-      _database1 = openDatabase('orders.db');
+    _database1 = openDatabase('orders.db');
+    // Get a reference to the database.
 
+    // Query the table for all The SubmitOrders.
+    final List<Map<String, dynamic>> maps =
+        await db.query('orders${widget.id}');
+    if (maps.isEmpty) {
+      print('maps is null');
+    } else {
+      // Convert the List<Map<String, dynamic> into a List<SubmitOrders>.
+
+      for (int i = 0; i < maps.length; i++) {
+        CartItems newlist = CartItems(
+          orderCount: maps[i]['buyurtmaSoni'],
+          doorName: maps[i]['eshikNomi'],
+        );
+
+        ordersList.add(newlist);
+        setState(() {});
+      }
+    }
+  }
+
+  checkTable() async {
+    _database1 = openDatabase('orders.db');
 
     final Database db = await _database1;
     int count = Sqflite.firstIntValue(
@@ -34,64 +60,55 @@ class _OrdersCartState extends State<OrdersCart> {
     if (count == 0) {
       print('table is empty');
     } else {
-      _database1 = openDatabase('orders.db');
-      // Get a reference to the database.
-      final Database db = await _database1;
-
-      // Query the table for all The SubmitOrders.
-      final List<Map<String, dynamic>> maps =
-          await db.query('orders${widget.id}');
-      if (maps.isEmpty) {
-        print('maps is null');
-      } else {
-        // Convert the List<Map<String, dynamic> into a List<SubmitOrders>.
-        for (int i = 0; i < maps.length; i++) {
-          CartItems newlist = CartItems(
-            orderCount: maps[i]['id'].toString(),
-            doorName: maps[i]['coronacount'],
-          );
-          ordersList.add(newlist);
-          setState(() {});
-        }
-      }
+      print('table has $count');
     }
   }
 
-
-
   Widget basicOrder(
       {String doorName, String buyurtmaSoni, int indexNum, Size sizeQuery}) {
-    return Container(
-      height: sizeQuery.height * 0.08,
-      child: Card(
-        child: Row(
-          children: [
-            SizedBox(
-              width: sizeQuery.width * 0.015,
-            ),
-            Text('${indexNum.toString()}.'),
-            SizedBox(
-              width: sizeQuery.width * 0.02,
-            ),
-            Container(
-              width: sizeQuery.width * 0.45,
-              child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Text(
-                    doorName,
-                    maxLines: 1,
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => SubmitOrderPage(
+                    orderID: widget.id,
+                    tableID: indexNum,
                   )),
-            ),
-            SizedBox(
-              width: sizeQuery.width * 0.01,
-            ),
-            VerticalDivider(
-              color: Colors.black,
-              endIndent: sizeQuery.height * 0.01,
-              indent: sizeQuery.height * 0.01,
-            ),
-            Text('Буйуртма сони: $buyurtmaSoni'),
-          ],
+        );
+      },
+      child: Container(
+        height: sizeQuery.height * 0.08,
+        child: Card(
+          child: Row(
+            children: [
+              SizedBox(
+                width: sizeQuery.width * 0.015,
+              ),
+              Text('${indexNum.toString()}.'),
+              SizedBox(
+                width: sizeQuery.width * 0.02,
+              ),
+              Container(
+                width: sizeQuery.width * 0.45,
+                child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Text(
+                      doorName,
+                      maxLines: 1,
+                    )),
+              ),
+              SizedBox(
+                width: sizeQuery.width * 0.01,
+              ),
+              VerticalDivider(
+                color: Colors.black,
+                endIndent: sizeQuery.height * 0.01,
+                indent: sizeQuery.height * 0.01,
+              ),
+              Text('Буйуртма сони: $buyurtmaSoni'),
+            ],
+          ),
         ),
       ),
     );
@@ -99,7 +116,6 @@ class _OrdersCartState extends State<OrdersCart> {
 
   @override
   void initState() {
-  
     super.initState();
   }
 
@@ -120,12 +136,7 @@ class _OrdersCartState extends State<OrdersCart> {
           IconButton(
             onPressed: () {
               getOrderData();
-             
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //       builder: (context) => SubmitOrderPage(orderID: widget.id,)),
-              // );
+              checkTable();
             },
             icon: Icon(Icons.add),
           ),
@@ -135,7 +146,7 @@ class _OrdersCartState extends State<OrdersCart> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => SubmitOrderPage(
-                          orderID: widget.id,
+                          orderID: widget.id,tableID: ordersList.length==0?1:ordersList.length+1,
                         )),
               );
             },
@@ -158,6 +169,16 @@ class _OrdersCartState extends State<OrdersCart> {
                 sizeQuery: sizeQuery);
           },
         ),
+
+        // child: AnimatedList(initialItemCount: ordersList.length,itemBuilder: (context,index,animation){
+        //   return SlideTransition(position: animation.drive(Tween(begin:Offset(300.0,200.0),end: Offset(100.0,50.0) )),
+        //     child: basicOrder(
+        //           doorName: ordersList[index].doorName,
+        //           buyurtmaSoni: ordersList[index].orderCount,
+        //           indexNum: index + 1,
+        //           sizeQuery: sizeQuery),
+        //   );
+        // }),
       ),
     );
   }

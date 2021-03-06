@@ -52,11 +52,11 @@ class _ActivesState extends State<ActiveActions> {
 
   Widget ordersCard(
       {String phoneNum, clientName, date, int id, Size sizeQuery}) {
-    return Container(
+    return Container(margin: EdgeInsets.only(left: 5,right: 5),
       height: sizeQuery.height * 0.07,
       width: sizeQuery.width * 0.9,
-      child: Card(
-        color: Colors.grey[200],
+      child: Container(
+    
         //Overall Card start
         child: Row(
           //Overall Card Row start
@@ -177,7 +177,7 @@ class _ActivesState extends State<ActiveActions> {
 
 
       var appbar = AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.transparent,
       );
 
 
@@ -187,54 +187,58 @@ class _ActivesState extends State<ActiveActions> {
 
     return Scaffold(
       appBar: appbar,
-      body: Column(
-        children: [
-          Container(
-            width: sizeQuery.width,
-            child: Card(
-              color: Colors.grey[200],
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: sizeQuery.width * 0.012,
-                  ),
-                  Text('№'),
-                  SizedBox(
-                    width: sizeQuery.width * 0.023,
-                  ),
-                  Text('ИД'),
-                  SizedBox(
-                    width: sizeQuery.width * 0.12,
-                  ),
-                  Text('Ф.И.Ш'),
-                  SizedBox(
-                    width: sizeQuery.width * 0.13,
-                  ),
-                  Text('Телефон'),
-                  SizedBox(
-                    width: sizeQuery.width * 0.1,
-                  ),
-                  Text('Сана'),
-                ],
+      body: Container(color: Colors.grey[200],
+        height: (sizeQuery.height-appbar.preferredSize.height-MediaQuery.of(context).padding.top)*0.88,
+        child: Column(
+          children: [
+            Container(
+              width: sizeQuery.width,
+              child: Card(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              elevation: 10,
+                color: Colors.orange[200],
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: sizeQuery.width * 0.010,
+                    ),
+                    Text('№',style: TextStyle(fontSize: 14),),
+                    SizedBox(
+                      width: sizeQuery.width * 0.023,
+                    ),
+                    Text('ИД',style: TextStyle(fontSize: 14)),
+                    SizedBox(
+                      width: sizeQuery.width * 0.09,
+                    ),
+                    Text('Ф.И.Ш',style: TextStyle(fontSize: 14)),
+                    SizedBox(
+                      width: sizeQuery.width * 0.11,
+                    ),
+                    Text('Телефон',style: TextStyle(fontSize: 14)),
+                    SizedBox(
+                      width: sizeQuery.width * 0.09,
+                    ),
+                    Text('Сана',style: TextStyle(fontSize: 14)),
+                  ],
+                ),
               ),
             ),
-          ),
-          Container(
-            height: (sizeQuery.height-appbar.preferredSize.height-MediaQuery.of(context).padding.top) * 0.78,
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: cardInfo.length,
-              itemBuilder: (_, index) {
-                return ordersCard(
-                    clientName: cardInfo[index].client,
-                    id: cardInfo[index].id,
-                    phoneNum: cardInfo[index].phoneNumber,
-                    sizeQuery: sizeQuery,
-                    date: cardInfo[index].actionDate);
-              },
+            Container(
+              height: (sizeQuery.height-appbar.preferredSize.height-MediaQuery.of(context).padding.top) * 0.8,
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: cardInfo.length,
+                itemBuilder: (_, index) {
+                  return ordersCard(
+                      clientName: cardInfo[index].client,
+                      id: cardInfo[index].id,
+                      phoneNum: cardInfo[index].phoneNumber,
+                      sizeQuery: sizeQuery,
+                      date: cardInfo[index].actionDate);
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
