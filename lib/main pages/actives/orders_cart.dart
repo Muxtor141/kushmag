@@ -1,8 +1,29 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:uymarket1/main%20pages/actives/submitOrder_page.dart';
 import 'package:uymarket1/models/active_orders_cart.dart';
 import 'package:uymarket1/models/submit_model.dart';
 import 'package:sqflite/sqflite.dart';
+
+class SecondPageRoute extends MaterialPageRoute {
+  SecondPageRoute() : super(builder: (BuildContext context) => OrdersCart());
+
+  // OPTIONAL IF YOU WISH TO HAVE SOME EXTRA ANIMATION WHILE ROUTING
+  @override
+  Widget buildPage(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation) {
+    return new RotationTransition(
+        turns: animation,
+        child: new ScaleTransition(
+          scale: animation,
+          child: new FadeTransition(
+            opacity: animation,
+            child: new OrdersCart(),
+          ),
+        ));
+  }
+}
 
 class OrdersCart extends StatefulWidget {
   final int id;
@@ -14,34 +35,29 @@ class OrdersCart extends StatefulWidget {
 
 class _OrdersCartState extends State<OrdersCart> {
   int tableID;
-  List<CartItems> ordersList = [
-    CartItems(
-        doorName: 'Oshxona eshigiOshxona eshigiOshxona eshigiOshxona eshigi',
-        orderCount: '22'),
-  ];
+  List<CartItems> ordersList = [];
 
   // ignore: missing_return
   Future<Database> _database1;
 // ignore: missing_return
   Future<List<SubmitOrders>> getOrderData() async {
     ordersList.clear();
-
+_database1 = openDatabase('orders.db');
     final Database db = await _database1;
 
-    _database1 = openDatabase('orders.db');
+    
     // Get a reference to the database.
-
-    // Query the table for all The SubmitOrders.
-    final List<Map<String, dynamic>> maps =
+    Timer(Duration(seconds: 1), () async{
+ final List<Map<String, dynamic>> maps =
         await db.query('orders${widget.id}');
-    if (maps.isEmpty) {
+    if (maps == null) {
       print('maps is null');
     } else {
       // Convert the List<Map<String, dynamic> into a List<SubmitOrders>.
 
       for (int i = 0; i < maps.length; i++) {
         CartItems newlist = CartItems(
-          orderCount: maps[i]['buyurtmaSoni'],
+          orderCount: maps[i]['buyurtmaSoni'].toString(),
           doorName: maps[i]['eshikNomi'],
         );
 
@@ -49,11 +65,14 @@ class _OrdersCartState extends State<OrdersCart> {
         setState(() {});
       }
     }
+      
+    });
+    // Query the table for all The SubmitOrders.
+   
   }
 
   checkTable() async {
     _database1 = openDatabase('orders.db');
-
     final Database db = await _database1;
     int count = Sqflite.firstIntValue(
         await db.rawQuery('SELECT COUNT(*) FROM orders${widget.id}'));
@@ -73,7 +92,7 @@ class _OrdersCartState extends State<OrdersCart> {
           MaterialPageRoute(
               builder: (context) => SubmitOrderPage(
                     orderID: widget.id,
-                    tableID: indexNum,
+                    previewModeStatus: true,
                   )),
         );
       },
@@ -136,7 +155,7 @@ class _OrdersCartState extends State<OrdersCart> {
           IconButton(
             onPressed: () {
               getOrderData();
-              checkTable();
+              // checkTable();
             },
             icon: Icon(Icons.add),
           ),
@@ -146,7 +165,10 @@ class _OrdersCartState extends State<OrdersCart> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => SubmitOrderPage(
-                          orderID: widget.id,tableID: ordersList.length==0?1:ordersList.length+1,
+                          orderID: widget.id,
+                          tableID: ordersList.length == 0
+                              ? 1
+                              : ordersList.length + 1,
                         )),
               );
             },

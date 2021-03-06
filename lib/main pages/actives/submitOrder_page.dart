@@ -6,7 +6,13 @@ import 'package:uymarket1/models/submit_model.dart';
 class SubmitOrderPage extends StatefulWidget {
   final int orderID;
   final int tableID;
-  SubmitOrderPage({Key key, this.orderID,this.tableID}) : super(key: key);
+  final bool previewModeStatus;
+  SubmitOrderPage({
+    Key key,
+    this.orderID,
+    this.tableID,
+    this.previewModeStatus,
+  }) : super(key: key);
   @override
   SubmitOrderPageState createState() => SubmitOrderPageState();
 }
@@ -61,9 +67,17 @@ class SubmitOrderPageState extends State<SubmitOrderPage> {
   final _dobor2Size2Key = GlobalKey<FormState>();
   final _dobor2CountKey = GlobalKey<FormState>();
   bool isError = false;
+  bool previewMode = false;
 
   void openDB() async {
-    WidgetsFlutterBinding.ensureInitialized();
+    if (widget.previewModeStatus) {
+      setState(() {
+               previewMode = true;
+            });
+     
+    }else{
+
+         WidgetsFlutterBinding.ensureInitialized();
     Future.delayed(Duration(seconds: 1));
     database = openDatabase(
       join(await getDatabasesPath(), 'orders.db'),
@@ -71,10 +85,15 @@ class SubmitOrderPageState extends State<SubmitOrderPage> {
         return db.execute(
             "CREATE TABLE orders${widget.orderID}(id INTEGER PRIMARY KEY, eshikNomi TEXT, razmerBoyi DOUBLE, razmereni DOUBLE, razmercount INTEGER,coronasirt DOUBLE,coronaishi DOUBLE,coronacount INTEGER,nalichniksize1 DOUBLE,nalichniksize2 DOUBLE,nalichnikcount INTEGER,boxCheck BOOLEAN,dobor1size1 DOUBLE,dobor1size2 DOUBLE,dobor2size1 DOUBLE,dobor2size2 DOUBLE,dobor1count INTEGER,dobor2count INTEGER,promok DOUBLE,buyurtmaSoni INTEGER)");
       },
-      version:1,
+      version: 1,
     );
 
     print('openDB() called');
+
+
+    }
+
+ 
   }
 
   Future<void> insertOrder(SubmitOrders orders) async {
@@ -367,365 +386,367 @@ class SubmitOrderPageState extends State<SubmitOrderPage> {
       ),
       body: Container(
         child: SingleChildScrollView(
-          child: Column(children: [
-            SizedBox(
-              height: sizeQuery.height * 0.03,
-            ),
-            Container(
-              width: sizeQuery.width,
-              child: const Text(
-                'Размеры',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+          child: IgnorePointer(ignoring: previewMode,
+            child: Column(children: [
+              SizedBox(
+                height: sizeQuery.height * 0.03,
               ),
-            ),
-            SizedBox(
-              height: sizeQuery.height * 0.03,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                basicTextField(
-                    formKey: _razmerBoyiKey,
-                    textController: razmeriHeightController,
-                    label: 'Бойы',
-                    sizeQuery: sizeQuery,
-                    textFieldsHeight: textFieldsHeight,
-                    width: 0.3),
-                basicTextField(
-                    formKey: _razmerEniKey,
-                    textController: razmeriWidthController,
-                    label: 'Ени',
-                    sizeQuery: sizeQuery,
-                    textFieldsHeight: textFieldsHeight,
-                    width: 0.3),
-                basicTextField(
-                    formKey: _razmerCountKey,
-                    textController: razmeriCountController,
-                    label: 'шт',
-                    sizeQuery: sizeQuery,
-                    textFieldsHeight: textFieldsHeight,
-                    width: 0.3),
-              ],
-            ),
-            SizedBox(
-              height: sizeQuery.height * 0.03,
-            ),
-            Container(
-              width: sizeQuery.width,
-              child: const Text(
-                'Корона',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            SizedBox(
-              height: sizeQuery.height * 0.03,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                basicTextField(
-                    formKey: _coronaSirtKey,
-                    textController: coronaSirtController,
-                    label: 'Сырт',
-                    sizeQuery: sizeQuery,
-                    textFieldsHeight: textFieldsHeight,
-                    width: 0.3),
-                basicTextField(
-                    formKey: _coronaIshiKey,
-                    textController: coronaIshiController,
-                    label: 'Иши',
-                    sizeQuery: sizeQuery,
-                    textFieldsHeight: textFieldsHeight,
-                    width: 0.3),
-                basicTextField(
-                    formKey: _coronaCountKey,
-                    textController: coronaCountController,
-                    label: 'шт',
-                    sizeQuery: sizeQuery,
-                    textFieldsHeight: textFieldsHeight,
-                    width: 0.3),
-              ],
-            ),
-            SizedBox(
-              height: sizeQuery.height * 0.03,
-            ),
-            Container(
-              width: sizeQuery.width,
-              child: const Text(
-                'Наличник',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            SizedBox(
-              height: sizeQuery.height * 0.03,
-            ),
-            Row(
-              children: [
-                SizedBox(
-                  width: sizeQuery.width * 0.27,
-                ),
-                const Text(
-                  'Размер',
-                  style: TextStyle(fontSize: 16),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: sizeQuery.height * 0.01,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                basicTextField(
-                    formKey: _nalichnikSize1Key,
-                    textController: nalichnikSize1Controller,
-                    label: '',
-                    sizeQuery: sizeQuery,
-                    textFieldsHeight: textFieldsHeight,
-                    width: 0.3),
-                basicTextField(
-                    formKey: _nalichnikSize2Key,
-                    textController: nalichnikSize2Controller,
-                    label: '',
-                    sizeQuery: sizeQuery,
-                    textFieldsHeight: textFieldsHeight,
-                    width: 0.3),
-                basicTextField(
-                    formKey: _nalichnikCountKey,
-                    textController: nalichnikCountController,
-                    label: 'шт',
-                    sizeQuery: sizeQuery,
-                    textFieldsHeight: textFieldsHeight,
-                    width: 0.3),
-              ],
-            ),
-            SizedBox(
-              height: sizeQuery.height * 0.02,
-            ),
-            Row(
-              children: [
-                SizedBox(
-                  width: sizeQuery.width * 0.02,
-                ),
-                const Text(
-                  'Каробка',
+              Container(
+                width: sizeQuery.width,
+                child: const Text(
+                  'Размеры',
+                  textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                Checkbox(
-                  value: this.packageCheck,
-                  checkColor: Colors.red,
-                  activeColor: Colors.black,
-                  onChanged: (value1) {
-                    setState(() {
-                      this.packageCheck = value1;
-                      print(packageCheck);
-                    });
-                  },
-                )
-              ],
-            ),
-            SizedBox(
-              height: sizeQuery.height * 0.01,
-            ),
-            Container(
-              width: sizeQuery.width,
-              child: const Text(
-                'Добор(общибка)',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
               ),
-            ),
-            SizedBox(
-              height: sizeQuery.height * 0.03,
-            ),
-            Row(
-              children: [
-                SizedBox(
-                  width: sizeQuery.width * 0.27,
-                ),
-                const Text(
-                  'Размер',
-                  style: TextStyle(fontSize: 16),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: sizeQuery.height * 0.01,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Text('1.'),
-                basicTextField(
-                    textController: dobor1Size1Controller,
-                    label: '',
-                    sizeQuery: sizeQuery,
-                    formKey: _dobor1Size1Key,
-                    textFieldsHeight: textFieldsHeight,
-                    width: 0.3),
-                basicTextField(
-                    formKey: _dobor1Size2Key,
-                    textController: dobor1Size2Controller,
-                    label: '',
-                    sizeQuery: sizeQuery,
-                    textFieldsHeight: textFieldsHeight,
-                    width: 0.3),
-                basicTextField(
-                    formKey: _dobor1CountKey,
-                    textController: dobor1Count,
-                    label: 'шт',
-                    sizeQuery: sizeQuery,
-                    textFieldsHeight: textFieldsHeight,
-                    width: 0.3),
-              ],
-            ),
-            SizedBox(
-              height: sizeQuery.height * 0.01,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Text('2.'),
-                basicTextField(
-                    formKey: _dobor2Size1Key,
-                    textController: dobor2Size1Controller,
-                    label: '',
-                    sizeQuery: sizeQuery,
-                    textFieldsHeight: textFieldsHeight,
-                    width: 0.3),
-                basicTextField(
-                    formKey: _dobor2Size2Key,
-                    textController: dobor2Size2Controller,
-                    label: '',
-                    sizeQuery: sizeQuery,
-                    textFieldsHeight: textFieldsHeight,
-                    width: 0.3),
-                basicTextField(
-                    formKey: _dobor2CountKey,
-                    textController: dobor2Count,
-                    label: 'шт',
-                    sizeQuery: sizeQuery,
-                    textFieldsHeight: textFieldsHeight,
-                    width: 0.3),
-              ],
-            ),
-            SizedBox(
-              height: sizeQuery.height * 0.03,
-            ),
-            Container(
-              width: sizeQuery.width,
-              child: const Text(
-                'Промок',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+              SizedBox(
+                height: sizeQuery.height * 0.03,
               ),
-            ),
-            SizedBox(
-              height: sizeQuery.height * 0.02,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(
-                  width: sizeQuery.width * 0.02,
-                ),
-                basicTextField(
-                    formKey: _promokSizeKey,
-                    textController: promokSizeController,
-                    label: '',
-                    sizeQuery: sizeQuery,
-                    textFieldsHeight: textFieldsHeight,
-                    width: 0.3),
-              ],
-            ),
-            SizedBox(
-              height: sizeQuery.height * 0.03,
-            ),
-            Divider(
-              height: 10,
-              thickness: 2,
-              color: Colors.black,
-            ),
-            SizedBox(
-              height: sizeQuery.height * 0.03,
-            ),
-            Container(
-              height: sizeQuery.height * 0.1,
-              child: Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   basicTextField(
-                      formKey: _eshikNomiKey,
-                      textController: eshikNomiController,
-                      label: 'Ешик Номи',
+                      formKey: _razmerBoyiKey,
+                      textController: razmeriHeightController,
+                      label: 'Бойы',
                       sizeQuery: sizeQuery,
                       textFieldsHeight: textFieldsHeight,
-                      width: 0.6),
+                      width: 0.3),
                   basicTextField(
-                      formKey: _buyurtmaSoniKey,
-                      textController: overallCountController,
-                      label: 'Буйуртма Сони',
+                      formKey: _razmerEniKey,
+                      textController: razmeriWidthController,
+                      label: 'Ени',
+                      sizeQuery: sizeQuery,
+                      textFieldsHeight: textFieldsHeight,
+                      width: 0.3),
+                  basicTextField(
+                      formKey: _razmerCountKey,
+                      textController: razmeriCountController,
+                      label: 'шт',
                       sizeQuery: sizeQuery,
                       textFieldsHeight: textFieldsHeight,
                       width: 0.3),
                 ],
               ),
-            ),
-            SizedBox(
-              height: sizeQuery.height * 0.02,
-            ),
-            Row(
-              children: [
-                SizedBox(
-                  width: sizeQuery.width * 0.55,
-                ),
-                ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all(Colors.greenAccent),
+              SizedBox(
+                height: sizeQuery.height * 0.03,
+              ),
+              Container(
+                width: sizeQuery.width,
+                child: const Text(
+                  'Корона',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
                   ),
-                  onPressed: () {
-                    if (validateAll()) {
-                      inserting(order);
-                      print('done');
-                    } else {
-                      print('requirements not completed');
-                    }
+                ),
+              ),
+              SizedBox(
+                height: sizeQuery.height * 0.03,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  basicTextField(
+                      formKey: _coronaSirtKey,
+                      textController: coronaSirtController,
+                      label: 'Сырт',
+                      sizeQuery: sizeQuery,
+                      textFieldsHeight: textFieldsHeight,
+                      width: 0.3),
+                  basicTextField(
+                      formKey: _coronaIshiKey,
+                      textController: coronaIshiController,
+                      label: 'Иши',
+                      sizeQuery: sizeQuery,
+                      textFieldsHeight: textFieldsHeight,
+                      width: 0.3),
+                  basicTextField(
+                      formKey: _coronaCountKey,
+                      textController: coronaCountController,
+                      label: 'шт',
+                      sizeQuery: sizeQuery,
+                      textFieldsHeight: textFieldsHeight,
+                      width: 0.3),
+                ],
+              ),
+              SizedBox(
+                height: sizeQuery.height * 0.03,
+              ),
+              Container(
+                width: sizeQuery.width,
+                child: const Text(
+                  'Наличник',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: sizeQuery.height * 0.03,
+              ),
+              Row(
+                children: [
+                  SizedBox(
+                    width: sizeQuery.width * 0.27,
+                  ),
+                  const Text(
+                    'Размер',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: sizeQuery.height * 0.01,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  basicTextField(
+                      formKey: _nalichnikSize1Key,
+                      textController: nalichnikSize1Controller,
+                      label: '',
+                      sizeQuery: sizeQuery,
+                      textFieldsHeight: textFieldsHeight,
+                      width: 0.3),
+                  basicTextField(
+                      formKey: _nalichnikSize2Key,
+                      textController: nalichnikSize2Controller,
+                      label: '',
+                      sizeQuery: sizeQuery,
+                      textFieldsHeight: textFieldsHeight,
+                      width: 0.3),
+                  basicTextField(
+                      formKey: _nalichnikCountKey,
+                      textController: nalichnikCountController,
+                      label: 'шт',
+                      sizeQuery: sizeQuery,
+                      textFieldsHeight: textFieldsHeight,
+                      width: 0.3),
+                ],
+              ),
+              SizedBox(
+                height: sizeQuery.height * 0.02,
+              ),
+              Row(
+                children: [
+                  SizedBox(
+                    width: sizeQuery.width * 0.02,
+                  ),
+                  const Text(
+                    'Каробка',
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                  Checkbox(
+                    value: this.packageCheck,
+                    checkColor: Colors.red,
+                    activeColor: Colors.black,
+                    onChanged: (value1) {
+                      setState(() {
+                        this.packageCheck = value1;
+                        print(packageCheck);
+                      });
+                    },
+                  )
+                ],
+              ),
+              SizedBox(
+                height: sizeQuery.height * 0.01,
+              ),
+              Container(
+                width: sizeQuery.width,
+                child: const Text(
+                  'Добор(общибка)',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: sizeQuery.height * 0.03,
+              ),
+              Row(
+                children: [
+                  SizedBox(
+                    width: sizeQuery.width * 0.27,
+                  ),
+                  const Text(
+                    'Размер',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: sizeQuery.height * 0.01,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text('1.'),
+                  basicTextField(
+                      textController: dobor1Size1Controller,
+                      label: '',
+                      sizeQuery: sizeQuery,
+                      formKey: _dobor1Size1Key,
+                      textFieldsHeight: textFieldsHeight,
+                      width: 0.3),
+                  basicTextField(
+                      formKey: _dobor1Size2Key,
+                      textController: dobor1Size2Controller,
+                      label: '',
+                      sizeQuery: sizeQuery,
+                      textFieldsHeight: textFieldsHeight,
+                      width: 0.3),
+                  basicTextField(
+                      formKey: _dobor1CountKey,
+                      textController: dobor1Count,
+                      label: 'шт',
+                      sizeQuery: sizeQuery,
+                      textFieldsHeight: textFieldsHeight,
+                      width: 0.3),
+                ],
+              ),
+              SizedBox(
+                height: sizeQuery.height * 0.01,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text('2.'),
+                  basicTextField(
+                      formKey: _dobor2Size1Key,
+                      textController: dobor2Size1Controller,
+                      label: '',
+                      sizeQuery: sizeQuery,
+                      textFieldsHeight: textFieldsHeight,
+                      width: 0.3),
+                  basicTextField(
+                      formKey: _dobor2Size2Key,
+                      textController: dobor2Size2Controller,
+                      label: '',
+                      sizeQuery: sizeQuery,
+                      textFieldsHeight: textFieldsHeight,
+                      width: 0.3),
+                  basicTextField(
+                      formKey: _dobor2CountKey,
+                      textController: dobor2Count,
+                      label: 'шт',
+                      sizeQuery: sizeQuery,
+                      textFieldsHeight: textFieldsHeight,
+                      width: 0.3),
+                ],
+              ),
+              SizedBox(
+                height: sizeQuery.height * 0.03,
+              ),
+              Container(
+                width: sizeQuery.width,
+                child: const Text(
+                  'Промок',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: sizeQuery.height * 0.02,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: sizeQuery.width * 0.02,
+                  ),
+                  basicTextField(
+                      formKey: _promokSizeKey,
+                      textController: promokSizeController,
+                      label: '',
+                      sizeQuery: sizeQuery,
+                      textFieldsHeight: textFieldsHeight,
+                      width: 0.3),
+                ],
+              ),
+              SizedBox(
+                height: sizeQuery.height * 0.03,
+              ),
+              Divider(
+                height: 10,
+                thickness: 2,
+                color: Colors.black,
+              ),
+              SizedBox(
+                height: sizeQuery.height * 0.03,
+              ),
+              Container(
+                height: sizeQuery.height * 0.1,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    basicTextField(
+                        formKey: _eshikNomiKey,
+                        textController: eshikNomiController,
+                        label: 'Ешик Номи',
+                        sizeQuery: sizeQuery,
+                        textFieldsHeight: textFieldsHeight,
+                        width: 0.6),
+                    basicTextField(
+                        formKey: _buyurtmaSoniKey,
+                        textController: overallCountController,
+                        label: 'Буйуртма Сони',
+                        sizeQuery: sizeQuery,
+                        textFieldsHeight: textFieldsHeight,
+                        width: 0.3),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: sizeQuery.height * 0.02,
+              ),
+              Row(
+                children: [
+                  SizedBox(
+                    width: sizeQuery.width * 0.55,
+                  ),
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all(Colors.greenAccent),
+                    ),
+                    onPressed: () {
+                      if (validateAll()) {
+                        inserting(order);
+                        print('done');
+                      } else {
+                        print('requirements not completed');
+                      }
 
-                    //   // inserting(order);
+                      //   // inserting(order);
 
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (_) => OrdersCart(
-                    //               id: widget.orderID,
-                    //             )));
-                  },
-                  child: Text('Саклаш ва кайтиш'),
-                )
-              ],
-            )
-          ]),
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (_) => OrdersCart(
+                      //               id: widget.orderID,
+                      //             )));
+                    },
+                    child: Text('Саклаш ва кайтиш'),
+                  )
+                ],
+              )
+            ]),
+          ),
         ),
       ),
     );

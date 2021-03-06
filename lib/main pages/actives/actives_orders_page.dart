@@ -52,122 +52,129 @@ class _ActivesState extends State<ActiveActions> {
 
   Widget ordersCard(
       {String phoneNum, clientName, date, int id, Size sizeQuery}) {
-    return Container(margin: EdgeInsets.only(left: 5,right: 5),
-      height: sizeQuery.height * 0.07,
-      width: sizeQuery.width * 0.9,
-      child: Container(
-    
-        //Overall Card start
-        child: Row(
-          //Overall Card Row start
-          children: [
-            Container(
-              width: sizeQuery.width * 0.05,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.blue)),
-              padding: EdgeInsets.all(1),
-              child: Container(
-                child: Text(
-                  '20',
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 10),
-                ),
-              ),
-            ),
-            SizedBox(
-              width: sizeQuery.width * 0.02,
-            ),
-            Container(
-              width: sizeQuery.width * 0.08,
-              child: Text(
-                id.toString(),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontSize: 10),
-              ),
-            ),
-            VerticalDivider(
-              indent: sizeQuery.height * 0.005,
-              endIndent: sizeQuery.height * 0.005,
-              color: Colors.black,
-            ),
-            Container(
-              width: sizeQuery.width * 0.21,
-              child: Text(
-                clientName,
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 10,
-                ),
-              ),
-            ),
-            VerticalDivider(
-              indent: sizeQuery.height * 0.005,
-              endIndent: sizeQuery.height * 0.005,
-              color: Colors.black,
-            ),
-            Container(
-              width: sizeQuery.width * 0.19,
-              child: Text(
-                phoneNum,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 10,
-                ),
-              ),
-            ),
-            VerticalDivider(
-              indent: sizeQuery.height * 0.005,
-              endIndent: sizeQuery.height * 0.005,
-              color: Colors.black,
-            ),
-            Container(
-                width: sizeQuery.width * 0.13,
-                child: Text(
-                  date,
-                  maxLines: 2,
-                  style: TextStyle(fontSize: 10),
-                  overflow: TextOverflow.ellipsis,
-                )),
-            SizedBox(
-              width: sizeQuery.width * 0.01,
-            ),
-            Container(
-                width: sizeQuery.width * 0.05,
-                child: IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.phone_forwarded_outlined,
-                    color: Colors.green,
-                  ),
-                  iconSize: 18,
-                )),
-            SizedBox(
-              width: sizeQuery.width * 0.03,
-            ),
-            Container(
-                width: sizeQuery.width * 0.05,
-                child: IconButton(
-                  onPressed: () {
-                    Navigator.push(
+    return GestureDetector(onTap: (){
+        Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => OrdersCart(id: id,)),
                     );
-                  },
-                  icon: Icon(
-                    Icons.login,
-                    color: Colors.black,
+    },
+      child: Container(margin: EdgeInsets.only(left: 5,right: 5),
+        height: sizeQuery.height * 0.07,
+        width: sizeQuery.width * 0.9,
+        child: Container(
+      
+          //Overall Card start
+          child: Row(
+            //Overall Card Row start
+            children: [
+              Container(
+                width: sizeQuery.width * 0.05,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Colors.blue)),
+                padding: EdgeInsets.all(1),
+                child: Container(
+                  child: Text(
+                    '20',
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 10),
                   ),
-                  iconSize: 18,
-                ))
-          ],
+                ),
+              ),
+              SizedBox(
+                width: sizeQuery.width * 0.02,
+              ),
+              Container(
+                width: sizeQuery.width * 0.08,
+                child: Text(
+                  id.toString(),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(fontSize: 10),
+                ),
+              ),
+              VerticalDivider(
+                indent: sizeQuery.height * 0.005,
+                endIndent: sizeQuery.height * 0.005,
+                color: Colors.black,
+              ),
+              Container(
+                width: sizeQuery.width * 0.21,
+                child: Text(
+                  clientName,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 10,
+                  ),
+                ),
+              ),
+              VerticalDivider(
+                indent: sizeQuery.height * 0.005,
+                endIndent: sizeQuery.height * 0.005,
+                color: Colors.black,
+              ),
+              Container(
+                width: sizeQuery.width * 0.19,
+                child: Text(
+                  phoneNum,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 10,
+                  ),
+                ),
+              ),
+              VerticalDivider(
+                indent: sizeQuery.height * 0.005,
+                endIndent: sizeQuery.height * 0.005,
+                color: Colors.black,
+              ),
+              Container(
+                  width: sizeQuery.width * 0.13,
+                  child: Text(
+                    date,
+                    maxLines: 2,
+                    style: TextStyle(fontSize: 10),
+                    overflow: TextOverflow.ellipsis,
+                  )),
+              SizedBox(
+                width: sizeQuery.width * 0.01,
+              ),
+              Container(
+                  width: sizeQuery.width * 0.05,
+                  child: IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.phone_forwarded_outlined,
+                      color: Colors.green,
+                    ),
+                    iconSize: 18,
+                  )),
+              SizedBox(
+                width: sizeQuery.width * 0.03,
+              ),
+              Container(
+                  width: sizeQuery.width * 0.05,
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => OrdersCart(id: id,)),
+                      );
+                    },
+                    icon: Icon(
+                      Icons.login,
+                      color: Colors.black,
+                    ),
+                    iconSize: 18,
+                  ))
+            ],
+          ),
+          //Overall Card Row start
         ),
-        //Overall Card Row start
+        //Overall Card end
       ),
-      //Overall Card end
     );
   }
 
@@ -201,23 +208,23 @@ class _ActivesState extends State<ActiveActions> {
                     SizedBox(
                       width: sizeQuery.width * 0.010,
                     ),
-                    Text('№',style: TextStyle(fontSize: 14),),
+                    const Text('№',style: TextStyle(fontSize: 14),),
                     SizedBox(
                       width: sizeQuery.width * 0.023,
                     ),
-                    Text('ИД',style: TextStyle(fontSize: 14)),
+                     const Text('ИД',style: TextStyle(fontSize: 14)),
                     SizedBox(
                       width: sizeQuery.width * 0.09,
                     ),
-                    Text('Ф.И.Ш',style: TextStyle(fontSize: 14)),
+                    const Text('Ф.И.Ш',style: TextStyle(fontSize: 14)),
                     SizedBox(
                       width: sizeQuery.width * 0.11,
                     ),
-                    Text('Телефон',style: TextStyle(fontSize: 14)),
+                    const Text('Телефон',style: TextStyle(fontSize: 14)),
                     SizedBox(
                       width: sizeQuery.width * 0.09,
                     ),
-                    Text('Сана',style: TextStyle(fontSize: 14)),
+                    const Text('Сана',style: TextStyle(fontSize: 14)),
                   ],
                 ),
               ),
