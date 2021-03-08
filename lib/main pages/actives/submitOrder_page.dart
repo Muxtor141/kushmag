@@ -69,6 +69,7 @@ class SubmitOrderPageState extends State<SubmitOrderPage> {
   Calculatings calculatings = Calculatings();
   bool isError = false;
   bool previewMode = false;
+  
   Future<bool> databaseExists1(String path) async {
     databaseFactory.databaseExists(path).then((value) {
       if (value) {
@@ -79,7 +80,6 @@ class SubmitOrderPageState extends State<SubmitOrderPage> {
         print('false');
         return false;
       }
-
     });
   }
 

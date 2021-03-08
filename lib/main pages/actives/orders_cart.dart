@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:uymarket1/main%20pages/actives/submitOrder_page.dart';
 import 'package:uymarket1/models/active_orders_cart.dart';
+import 'package:uymarket1/models/models/get_status_modal.dart';
 import 'package:uymarket1/models/orders.dart';
 import 'package:uymarket1/models/submit_model.dart';
 import 'package:sqflite/sqflite.dart';
@@ -28,7 +29,9 @@ class SecondPageRoute extends MaterialPageRoute {
 
 class OrdersCart extends StatefulWidget {
   final int id;
-  OrdersCart({this.id});
+  OrdersCart({
+    this.id,
+  });
 
   @override
   _OrdersCartState createState() => _OrdersCartState();
@@ -152,10 +155,11 @@ class _OrdersCartState extends State<OrdersCart> {
         actions: [
           IconButton(
             onPressed: () {
-              getOrderData();
+              // getOrderData();
               // checkTable();
-              Orders new1list = new Orders();
-              new1list.new1();
+              Status status = Status();
+              print(status.status.toString());
+              status.setTableStatus();
             },
             icon: Icon(Icons.add),
           ),

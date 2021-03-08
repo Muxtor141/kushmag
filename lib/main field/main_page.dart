@@ -25,7 +25,7 @@ class _MainPageState extends State<MainPage> {
       bottomNavigationBar: Container(
         height: (sizeQuery.height -
            appBar.preferredSize.height -
-            MediaQuery.of(context).padding.top) * 0.12,
+            MediaQuery.of(context).padding.top- MediaQuery.of(context).padding.bottom) * 0.12,
         child: BottomNavigationBar(
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(

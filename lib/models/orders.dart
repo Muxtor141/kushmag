@@ -2,6 +2,7 @@ class Orders {
   final String phoneNumber, address,  client;
   final int id;
   final String actionDate;
+  
   Orders(
       {this.address,
       this.client,
@@ -9,7 +10,5 @@ class Orders {
       this.phoneNumber,
       this.actionDate,
       this.id});
-  new1() {
-    print('now');
-  }
+
 }

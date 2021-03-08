@@ -258,7 +258,7 @@ class _ActivesState extends State<ActiveActions> {
                     ),
                     const Text('Телефон', style: TextStyle(fontSize: 14)),
                     SizedBox(
-                      width: sizeQuery.width * 0.09,
+                      width: sizeQuery.width * 0.11,
                     ),
                     const Text('Сана', style: TextStyle(fontSize: 14)),
                   ],
