@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:uymarket1/main%20pages/actives/submitOrder_page.dart';
 import 'package:uymarket1/models/active_orders_cart.dart';
+import 'package:uymarket1/models/orders.dart';
 import 'package:uymarket1/models/submit_model.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -42,33 +43,30 @@ class _OrdersCartState extends State<OrdersCart> {
 // ignore: missing_return
   Future<List<SubmitOrders>> getOrderData() async {
     ordersList.clear();
-_database1 = openDatabase('orders.db');
+    _database1 = openDatabase('orders.db');
     final Database db = await _database1;
 
-    
     // Get a reference to the database.
-    Timer(Duration(seconds: 1), () async{
- final List<Map<String, dynamic>> maps =
-        await db.query('orders${widget.id}');
-    if (maps == null) {
-      print('maps is null');
-    } else {
-      // Convert the List<Map<String, dynamic> into a List<SubmitOrders>.
+    Timer(Duration(seconds: 1), () async {
+      final List<Map<String, dynamic>> maps =
+          await db.query('orders${widget.id}');
+      if (maps == null) {
+        print('maps is null');
+      } else {
+        // Convert the List<Map<String, dynamic> into a List<SubmitOrders>.
 
-      for (int i = 0; i < maps.length; i++) {
-        CartItems newlist = CartItems(
-          orderCount: maps[i]['buyurtmaSoni'].toString(),
-          doorName: maps[i]['eshikNomi'],
-        );
+        for (int i = 0; i < maps.length; i++) {
+          CartItems newlist = CartItems(
+            orderCount: maps[i]['buyurtmaSoni'].toString(),
+            doorName: maps[i]['eshikNomi'],
+          );
 
-        ordersList.add(newlist);
-        setState(() {});
+          ordersList.add(newlist);
+          setState(() {});
+        }
       }
-    }
-      
     });
     // Query the table for all The SubmitOrders.
-   
   }
 
   checkTable() async {
@@ -156,6 +154,8 @@ _database1 = openDatabase('orders.db');
             onPressed: () {
               getOrderData();
               // checkTable();
+              Orders new1list = new Orders();
+              new1list.new1();
             },
             icon: Icon(Icons.add),
           ),

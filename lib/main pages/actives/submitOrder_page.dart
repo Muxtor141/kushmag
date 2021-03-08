@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:uymarket1/main%20pages/actives/calculatings.dart';
 import 'package:uymarket1/models/submit_model.dart';
 
 class SubmitOrderPage extends StatefulWidget {
@@ -13,6 +16,7 @@ class SubmitOrderPage extends StatefulWidget {
     this.tableID,
     this.previewModeStatus,
   }) : super(key: key);
+
   @override
   SubmitOrderPageState createState() => SubmitOrderPageState();
 }
@@ -28,21 +32,17 @@ class SubmitOrderPageState extends State<SubmitOrderPage> {
   final coronaSirtController = TextEditingController();
   final coronaIshiController = TextEditingController();
   final coronaCountController = TextEditingController();
-
   final nalichnikSize1Controller = TextEditingController();
   final nalichnikSize2Controller = TextEditingController();
   final nalichnikCountController = TextEditingController();
-
   final dobor1Size1Controller = TextEditingController();
   final dobor1Size2Controller = TextEditingController();
   final dobor1Count = TextEditingController();
   final dobor2Size1Controller = TextEditingController();
   final dobor2Size2Controller = TextEditingController();
   final dobor2Count = TextEditingController();
-
   final promokSizeController = TextEditingController();
   final eshikNomiController = TextEditingController();
-
   final overallCountController = TextEditingController();
   final orderNameController = TextEditingController();
 
@@ -57,7 +57,7 @@ class SubmitOrderPageState extends State<SubmitOrderPage> {
   final _nalichnikSize2Key = GlobalKey<FormState>();
   final _promokSizeKey = GlobalKey<FormState>();
   final _eshikNomiKey = GlobalKey<FormState>();
-  final _buyurtmaSoniKey = GlobalKey<FormState>();
+  final buyurtmaSoniKey = GlobalKey<FormState>();
 
   final _dobor1Size1Key = GlobalKey<FormState>();
   final _dobor1Size2Key = GlobalKey<FormState>();
@@ -66,34 +66,48 @@ class SubmitOrderPageState extends State<SubmitOrderPage> {
   final _dobor2Size1Key = GlobalKey<FormState>();
   final _dobor2Size2Key = GlobalKey<FormState>();
   final _dobor2CountKey = GlobalKey<FormState>();
+  Calculatings calculatings = Calculatings();
   bool isError = false;
   bool previewMode = false;
+  Future<bool> databaseExists1(String path) async {
+    databaseFactory.databaseExists(path).then((value) {
+      if (value) {
+        print('true');
+        return true;
+        //database
+      } else {
+        print('false');
+        return false;
+      }
+
+    });
+  }
+
+  checkDatabase() async {
+    print(await databaseExists1('orders.db'));
+  }
 
   void openDB() async {
-    if (widget.previewModeStatus) {
+    if (widget.previewModeStatus == null ? false : widget.previewModeStatus) {
       setState(() {
-               previewMode = true;
-            });
-     
-    }else{
+        previewMode = true;
+      });
+    } else {
+      WidgetsFlutterBinding.ensureInitialized();
 
-         WidgetsFlutterBinding.ensureInitialized();
-    Future.delayed(Duration(seconds: 1));
-    database = openDatabase(
-      join(await getDatabasesPath(), 'orders.db'),
-      onCreate: (db, version) {
-        return db.execute(
-            "CREATE TABLE orders${widget.orderID}(id INTEGER PRIMARY KEY, eshikNomi TEXT, razmerBoyi DOUBLE, razmereni DOUBLE, razmercount INTEGER,coronasirt DOUBLE,coronaishi DOUBLE,coronacount INTEGER,nalichniksize1 DOUBLE,nalichniksize2 DOUBLE,nalichnikcount INTEGER,boxCheck BOOLEAN,dobor1size1 DOUBLE,dobor1size2 DOUBLE,dobor2size1 DOUBLE,dobor2size2 DOUBLE,dobor1count INTEGER,dobor2count INTEGER,promok DOUBLE,buyurtmaSoni INTEGER)");
-      },
-      version: 1,
-    );
+      // ignore: unused_element
 
-    print('openDB() called');
+      database = openDatabase(
+        join(await getDatabasesPath(), 'orders.db'),
+        onCreate: (db, version) {
+          return db.execute(
+              "CREATE TABLE orders${widget.orderID}(id INTEGER PRIMARY KEY, eshikNomi TEXT, razmerBoyi DOUBLE, razmereni DOUBLE, razmercount INTEGER,coronasirt DOUBLE,coronaishi DOUBLE,coronacount INTEGER,nalichniksize1 DOUBLE,nalichniksize2 DOUBLE,nalichnikcount INTEGER,boxCheck BOOLEAN,dobor1size1 DOUBLE,dobor1size2 DOUBLE,dobor2size1 DOUBLE,dobor2size2 DOUBLE,dobor1count INTEGER,dobor2count INTEGER,promok DOUBLE,buyurtmaSoni INTEGER)");
+        },
+        version: 1,
+      );
 
-
+      print('openDB() called');
     }
-
- 
   }
 
   Future<void> insertOrder(SubmitOrders orders) async {
@@ -290,7 +304,7 @@ class SubmitOrderPageState extends State<SubmitOrderPage> {
   }
 
   buyurtmaSoniValidate() {
-    if (singleValidateModel(_buyurtmaSoniKey)) {
+    if (singleValidateModel(buyurtmaSoniKey)) {
       return true;
     } else {
       return false;
@@ -317,6 +331,48 @@ class SubmitOrderPageState extends State<SubmitOrderPage> {
       buyurtmaSoniValidate();
       return false;
     }
+  }
+
+  validateFromCalculatings() {
+    calculatings = Calculatings(
+        buyurtmaSoniKey: buyurtmaSoniKey,
+        coronaCountController: coronaCountController,
+        coronaIshiController: coronaIshiController,
+        coronaSirtController: coronaSirtController,
+        coronaCountKey: _coronaCountKey,
+        coronaIshiKey: _coronaIshiKey,
+        coronaSirtKey: _coronaSirtKey,
+        dobor1Count: dobor1Count,
+        dobor1Size1Controller: dobor1Size1Controller,
+        dobor1Size2Controller: dobor1Size2Controller,
+        dobor2Size1Controller: dobor2Size1Controller,
+        dobor2Size2Controller: dobor2Size2Controller,
+        dobor2Count: dobor2Count,
+        dobor1CountKey: _dobor1CountKey,
+        dobor1Size1Key: _dobor1Size1Key,
+        dobor1Size2Key: _dobor1Size2Key,
+        dobor2CountKey: _dobor2CountKey,
+        dobor2Size1Key: _dobor2Size1Key,
+        dobor2Size2Key: _dobor2Size2Key,
+        eshikNomiController: eshikNomiController,
+        eshikNomiKey: _eshikNomiKey,
+        nalichnikCountController: nalichnikCountController,
+        nalichnikCountKey: _nalichnikCountKey,
+        nalichnikSize1Key: _nalichnikSize1Key,
+        nalichnikSize2Key: _nalichnikSize2Key,
+        nalichnikSize1Controller: nalichnikSize1Controller,
+        nalichnikSize2Controller: nalichnikSize2Controller,
+        orderNameController: orderNameController,
+        overallCountController: overallCountController,
+        promokSizeController: promokSizeController,
+        promokSizeKey: _promokSizeKey,
+        razmerBoyiKey: _razmerBoyiKey,
+        razmerCountKey: _razmerCountKey,
+        razmerEniKey: _razmerEniKey,
+        razmeriCountController: razmeriCountController,
+        razmeriHeightController: razmeriHeightController,
+        razmeriWidthController: razmeriWidthController);
+    calculatings.validateAll();
   }
 
 //
@@ -386,7 +442,8 @@ class SubmitOrderPageState extends State<SubmitOrderPage> {
       ),
       body: Container(
         child: SingleChildScrollView(
-          child: IgnorePointer(ignoring: previewMode,
+          child: IgnorePointer(
+            ignoring: previewMode,
             child: Column(children: [
               SizedBox(
                 height: sizeQuery.height * 0.03,
@@ -702,7 +759,7 @@ class SubmitOrderPageState extends State<SubmitOrderPage> {
                         textFieldsHeight: textFieldsHeight,
                         width: 0.6),
                     basicTextField(
-                        formKey: _buyurtmaSoniKey,
+                        formKey: buyurtmaSoniKey,
                         textController: overallCountController,
                         label: 'Буйуртма Сони',
                         sizeQuery: sizeQuery,
@@ -725,13 +782,16 @@ class SubmitOrderPageState extends State<SubmitOrderPage> {
                           MaterialStateProperty.all(Colors.greenAccent),
                     ),
                     onPressed: () {
-                      if (validateAll()) {
-                        inserting(order);
-                        print('done');
-                      } else {
-                        print('requirements not completed');
-                      }
+                      // if (validateAll()) {
+                      //   Timer(Duration(seconds: 1), () {
+                      //     inserting(order);
+                      //   });
 
+                      //   print('done');
+                      // } else {
+                      //   print('requirements not completed');
+                      // }
+                      checkDatabase();
                       //   // inserting(order);
 
                       // Navigator.push(
